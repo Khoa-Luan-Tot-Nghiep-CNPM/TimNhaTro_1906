@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.doan.timnhatro">
+
+    <dist:module dist:instant="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".base.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".view.PostsManagerActivity"></activity>
+        <activity android:name=".view.DirectActivity" />
+        <activity android:name=".view.UpdatePasswordActivity" />
+        <activity android:name=".view.UpdateNameActivity" />
+        <activity android:name=".view.DetailMotelRoomActivity" />
+        <activity android:name=".view.SelectLocationActivity" />
+        <activity android:name=".view.VerifyPhoneNumberActivity" />
+        <activity android:name=".view.RegistrationActivity" />
+        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.PicturePickerActivity" />
+        <activity android:name=".view.CreatePostsActivity" />
+        <activity android:name=".view.HouseActivity" />
+        <activity android:name=".view.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC1TYb-0D8nGoosTwiqClfEe4Cy8ClPDXE" />
+    </application>
+
+</manifest>

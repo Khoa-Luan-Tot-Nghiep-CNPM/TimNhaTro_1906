@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#00D760"
+            app:title="Thư Viện Ảnh"
+            android:id="@+id/toolbar"
+            app:titleTextColor="#fff" />
+
+        <ImageView
+            android:id="@+id/imgDoneAll"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:visibility="gone"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_done_all" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recPictureList"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:background="#43475F"/>
+    <TextView
+        android:id="@+id/txtPictureCount"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#00D760"
+        android:text="Đã chọn: 0"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:paddingStart="20dp"
+        tools:ignore="RtlSymmetry" />
+</FrameLayout>

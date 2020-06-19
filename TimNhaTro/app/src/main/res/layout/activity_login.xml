@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#fff">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="Đăng Nhập"
+        android:textColor="@color/colorBlue"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <EditText
+            android:id="@+id/edtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_custom_3"
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textColor="#111"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="#fff"
+            android:paddingStart="7.5dp"
+            android:paddingEnd="7.5dp"
+            android:text="Tên tài khoản"
+            android:textColor="@color/colorBlue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_custom_3"
+            android:layout_marginTop="10dp"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textColor="#111"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="#fff"
+            android:paddingStart="7.5dp"
+            android:paddingEnd="7.5dp"
+            android:text="Mật khẩu"
+            android:textColor="@color/colorBlue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+    <Button
+        android:onClick="onClickLogin"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:text="Đăng Nhập"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/ic_custom_4"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hoặc"
+        android:textColor="#111"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
+    <Button
+        android:onClick="onClickRegistration"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="Tạo Tài Khoản Mới"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:background="@drawable/ic_custom_4"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

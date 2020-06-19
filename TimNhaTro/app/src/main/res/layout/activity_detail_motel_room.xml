@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:attrs="http://schemas.android.com/tools"
+    android:background="#fff"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/viewPager"/>
+                <com.rd.PageIndicatorView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:piv_animationType="scale"
+                    app:piv_dynamicCount="true"
+                    app:piv_interactiveAnimation="true"
+                    app:piv_selectedColor="#fff"
+                    app:piv_unselectedColor="#ADADAD"
+                    app:piv_viewPager="@id/viewPager"
+                    attrs:piv_padding="7dp"
+                    attrs:piv_radius="5dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="15dp"/>
+            </FrameLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="   "
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNameMotelRoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/chewy"
+                android:text="Phòng trọ Việt Dũng"
+                android:textColor="#111"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ngày đăng:   04:36:43   21/12/2019"
+                android:textColor="#696969"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"/>
+
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giá phòng: 1.200.000 VND"
+                android:textSize="15sp"
+                android:textColor="#111"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <TextView
+                android:id="@+id/txtStreet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đường: 123 Ung Văn Khiêm, Phường 25, Quân Bình Thạnh, TP Hồ Chí Minh"
+                android:textSize="15sp"
+                android:textColor="#111"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+                <TextView
+                    android:id="@+id/edtDescribe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="70dp"
+                    android:gravity="top"
+                    android:background="@drawable/ic_custom_3"
+                    android:layout_marginTop="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="15dp"
+                    android:textColor="#111"
+                    android:textSize="14sp"
+                    android:text="Homestay cao cấp tại:
+\n\nngõ 1 Phạm Tuấn Tài, HN
+\nngõ 112 Hoàng Quốc Việt, HN
+\nngõ 68 Cầu Giấy, HN
+\nngõ 210 Hoàng Quốc Việt, HN
+\nngõ 54 Mai Dịch, HN
+\nngõ 29 Dịch Vọng, HN"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="#fff"
+                    android:paddingStart="7.5dp"
+                    android:paddingEnd="7.5dp"
+                    android:text="Mô tả"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/ic_account_circle_128dp"
+                    android:id="@+id/imgAvatar"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp">
+
+                    <TextView
+                        android:id="@+id/txtName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nguyễn Việt Dũng"
+                        android:textColor="#111"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/audiowide"
+                        android:layout_marginEnd="20dp"/>
+                    <TextView
+                        android:id="@+id/txtPhoneNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Số điện thoại: 0843269991"
+                        android:textColor="#696969"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="50dp">
+
+                <Button
+                    android:onClick="onClickCallNow"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:text="Gọi Ngay"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:background="@drawable/ic_custom_4"
+                    android:layout_marginEnd="15dp"/>
+                <Button
+                    android:onClick="onClickDirect"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:text="Chỉ đường"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:background="@drawable/ic_custom_4"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
