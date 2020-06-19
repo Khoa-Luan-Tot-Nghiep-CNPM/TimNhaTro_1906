@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.doan.timnhatro.R;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.MotelRoom;
@@ -38,6 +35,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -117,8 +117,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         CircleOptions circleOptions = new CircleOptions()
                 .strokeWidth(5)
-                .strokeColor(Color.GREEN)
-                .fillColor(Color.parseColor("#5C57FF95"))
+                .strokeColor(Color.parseColor("#4d008ba3"))
+                .fillColor(Color.parseColor("#4d00bcd4"))
                 .center(myPosition)
                 .radius(radius * 1000);
         this.googleMap.addCircle(circleOptions);

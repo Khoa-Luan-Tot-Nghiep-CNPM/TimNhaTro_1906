@@ -12,7 +12,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#00D760"
+            android:background="@color/colorPrimary"
             app:title="Thư Viện Ảnh"
             android:id="@+id/toolbar"
             app:titleTextColor="#fff" />
@@ -33,18 +33,19 @@
         android:id="@+id/recPictureList"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
-        android:background="#43475F"/>
+        android:background="@color/colorPrimaryDark"/>
+
     <TextView
         android:id="@+id/txtPictureCount"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#00D760"
-        android:text="Đã chọn: 0"
         android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:textSize="17sp"
         android:paddingStart="20dp"
+        android:text="Đã chọn: 0"
+        android:textColor="#fff"
+        android:textSize="17sp"
+        android:textStyle="bold"
         tools:ignore="RtlSymmetry" />
 </FrameLayout>

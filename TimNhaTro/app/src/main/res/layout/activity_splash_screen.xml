@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/faster_one"
+        android:fontFamily="@font/bungee"
         android:text="Tìm Nhà Trọ"
         android:textColor="#111"
         android:textSize="30sp"

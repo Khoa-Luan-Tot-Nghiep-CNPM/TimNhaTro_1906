@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#00D760"
+        android:background="@color/colorPrimary"
         app:title="Phê Duyệt Bài Viết"
         android:id="@+id/toolbar"
         app:titleTextColor="#fff"/>

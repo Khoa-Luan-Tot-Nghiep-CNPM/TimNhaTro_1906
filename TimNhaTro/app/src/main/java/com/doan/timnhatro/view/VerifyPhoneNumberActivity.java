@@ -10,10 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.doan.timnhatro.R;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.Account;
@@ -43,6 +39,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class VerifyPhoneNumberActivity extends AppCompatActivity {
 
@@ -214,7 +214,7 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
         progressDialog.setMessage("Đang tạo tài khoản...");
         FirebaseDatabase.getInstance().getReference()
                 .child("Account")
-                .child(account.getUserName())
+                .child(account.getPhoneNumber())
                 .setValue(account,
                         new DatabaseReference.CompletionListener() {
                             @Override
