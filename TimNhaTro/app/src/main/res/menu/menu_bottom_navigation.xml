@@ -10,11 +10,11 @@
         android:icon="@drawable/ic_maps_24dp"/>
     <item
         android:id="@+id/menu_add"
-        android:title=""
+        android:title="Quanh đây"
         android:icon="@drawable/ic_add_circle_24dp"/>
     <item
         android:id="@+id/menu_like"
-        android:title=""
+        android:title="Yêu thích"
         android:icon="@drawable/ic_like_circle"/>
     <item
         android:id="@+id/menu_account"

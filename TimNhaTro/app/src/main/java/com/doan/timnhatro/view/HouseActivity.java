@@ -12,6 +12,7 @@ import com.doan.timnhatro.R;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.fragment.AccountFragment;
 import com.doan.timnhatro.fragment.HouseFragment;
+import com.doan.timnhatro.fragment.LikePostFragment;
 import com.doan.timnhatro.fragment.MapsFragment;
 import com.doan.timnhatro.utils.AccountUtils;
 import com.doan.timnhatro.utils.LocationUtils;
@@ -59,6 +60,13 @@ public class HouseActivity extends AppCompatActivity {
                 case R.id.menu_account:
                     if (AccountUtils.getInstance().getAccount() != null) {
                         loadFragment(new AccountFragment());
+                        return true;
+                    }
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    return false;
+                case R.id.menu_like:
+                    if (AccountUtils.getInstance().getAccount()!=null){
+                        loadFragment(new LikePostFragment());
                         return true;
                     }
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));

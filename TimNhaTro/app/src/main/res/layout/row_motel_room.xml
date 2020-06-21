@@ -24,37 +24,48 @@
                 android:layout_marginTop="5dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:src="@drawable/ic_account_circle_128dp"
                     android:id="@+id/imgAvatar"
+                    android:layout_weight="1"
                     android:layout_marginStart="5dp"/>
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="316dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp">
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/txtName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="270dp"
                         android:layout_height="wrap_content"
-                        android:text="Nguyễn Việt Dũng"
-                        android:textColor="#111"
-                        android:textStyle="bold"
-                        android:textSize="17sp"
-                        android:singleLine="true"
+                        android:layout_marginEnd="20dp"
                         android:ellipsize="end"
                         android:fontFamily="@font/chewy"
-                        android:layout_marginEnd="20dp"/>
+                        android:singleLine="true"
+                        android:text="Nguyễn Việt Dũng"
+                        android:textColor="#111"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txtTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1 giờ trước"
                         android:textColor="#696969"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
+                <ImageView
+                    android:id="@+id/likepost"
+                    android:layout_weight="1"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_dislike_circle" />
             </LinearLayout>
             <TextView
                 android:id="@+id/txtPrice"
