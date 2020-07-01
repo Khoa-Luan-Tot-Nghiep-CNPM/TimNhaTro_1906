@@ -31,6 +31,7 @@ import java.util.Objects;
 
 public class SelectLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+
     private LatLng myLocationSelect;
     private GoogleMap googleMap;
     private Button btnSelectDone;

@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.SearchFilterRoomActivity"></activity>
+        <activity android:name=".view.TestActivity"></activity>
+        <activity android:name=".view.SearchFilterRoomActivity" />
         <activity android:name=".view.PostsManagerActivity" />
         <activity android:name=".view.DirectActivity" />
         <activity android:name=".view.UpdatePasswordActivity" />
@@ -44,11 +45,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC1TYb-0D8nGoosTwiqClfEe4Cy8ClPDXE" />
     </application>
-
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <dist:module dist:instant="true" />
 
