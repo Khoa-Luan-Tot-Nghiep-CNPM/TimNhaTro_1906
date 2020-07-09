@@ -23,6 +23,7 @@ import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.Account;
 import com.doan.timnhatro.model.MotelRoom;
 import com.doan.timnhatro.utils.AccountUtils;
+import com.doan.timnhatro.view.ChartStatisticActivity;
 import com.doan.timnhatro.view.HouseActivity;
 import com.doan.timnhatro.view.PostsManagerActivity;
 import com.doan.timnhatro.view.UpdateNameActivity;
@@ -117,7 +118,24 @@ public class AccountFragment extends Fragment {
             public void onClick(final View v) {
 
                 if (AccountUtils.getInstance().getAccount().getPhoneNumber().equals(Constants.PHONE_NUMBER_ADMIN)){
-                    startActivity(new Intent(getActivity(), PostsManagerActivity.class));
+
+                    String[] items = {"Thống kê", "Quản lí tin"};
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("Quản Trị")
+                            .setItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    switch (i){
+                                        case 0:
+                                            startActivity(new Intent(v.getContext(), ChartStatisticActivity.class));
+                                            break;
+                                        case 1:
+                                            startActivity(new Intent(getActivity(), PostsManagerActivity.class));
+                                            break;
+                                    }
+                                }
+                            }).show();
+
                     return;
                 }
 
