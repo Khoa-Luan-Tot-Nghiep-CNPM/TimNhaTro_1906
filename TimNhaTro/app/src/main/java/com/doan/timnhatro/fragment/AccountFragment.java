@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -127,7 +128,8 @@ public class AccountFragment extends Fragment {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     switch (i){
                                         case 0:
-                                            startActivity(new Intent(v.getContext(), ChartStatisticActivity.class));
+                                            //startActivity(new Intent(v.getContext(), ChartStatisticActivity.class));
+                                            loadFragment(new StatisticFragment());
                                             break;
                                         case 1:
                                             startActivity(new Intent(getActivity(), PostsManagerActivity.class));
@@ -202,5 +204,12 @@ public class AccountFragment extends Fragment {
 
         txtName.setText(account.getName());
         txtPhoneNumber.setText(account.getPhoneNumber());
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

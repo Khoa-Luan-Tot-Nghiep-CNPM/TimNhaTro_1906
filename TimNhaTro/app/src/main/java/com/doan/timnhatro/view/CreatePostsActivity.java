@@ -3,6 +3,7 @@ package com.doan.timnhatro.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,7 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +29,7 @@ import com.doan.timnhatro.R;
 import com.doan.timnhatro.adapter.PictureIntroduceAdapter;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.callback.OnPickPictureListener;
+import com.doan.timnhatro.fragment.StatisticFragment;
 import com.doan.timnhatro.model.MotelRoom;
 import com.doan.timnhatro.model.Position;
 import com.doan.timnhatro.utils.AccountUtils;
@@ -35,9 +40,12 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,26 +54,190 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CreatePostsActivity extends AppCompatActivity {
 
     private RecyclerView recPicture;
     private ArrayList<String> arrayPicture = new ArrayList<>();
+    private final ArrayList<String> arrayTypeRoom = new ArrayList<>();
+    private final ArrayList<String> arrayCity = new ArrayList<>();
+    private final ArrayList<String> arrayDistrict = new ArrayList<>();
     private PictureIntroduceAdapter pictureIntroduceAdapter;
     private Position position;
-    private EditText edtName,edtDescribe,edtPrice,edtStreet,edtDistrict,edtCity;
-    private TextView txtLatitude,txtLongitude;
+    private EditText edtDescribe,edtPrice,edtStreet;
+    private TextView txtLatitude,txtLongitude ;
+    private Spinner edtName,edtCity,edtDistrict;
     private ProgressDialog progressDialog;
+    private DatabaseReference TypeMotelRef, CityNameRef, DistrictRef;
+
+    String[] name = new String[1];
+    String[] city = new String[1];
+    String[] district = new String[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_posts);
 
+        TypeMotelRef = FirebaseDatabase.getInstance().getReference().child("typemotel");
+        CityNameRef = FirebaseDatabase.getInstance().getReference().child("CiTy");
+        DistrictRef = FirebaseDatabase.getInstance().getReference().child("District");
+
         initView();
+       /* edtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TypeMotelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            int i=0;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                                //arrayTypeRoom.add(snapshot.getValue().toString());
+                                arrayTypeRoom.add(snapshot.getValue().toString());
+                                AlertDialog.Builder builder =new AlertDialog.Builder(CreatePostsActivity.this);
+
+                                if (arrayTypeRoom.size() == dataSnapshot.getChildrenCount()){
+                                    builder.setTitle("Loại phòng").setItems(arrayTypeRoom.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            switch (i){
+                                                case 0:
+                                                    edtName.setText(arrayTypeRoom.get(0));
+                                                    break;
+                                                case 1:
+                                                    edtName.setText(arrayTypeRoom.get(1));
+                                                    break;
+                                                case 2:
+                                                    edtName.setText(arrayTypeRoom.get(2));
+                                                    break;
+                                                case 3:
+                                                    edtName.setText(arrayTypeRoom.get(3));
+                                                    break;
+                                                case 4:
+                                                    edtName.setText(arrayTypeRoom.get(4));
+                                                    break;
+                                            }
+                                        }
+                                    }).show();
+                                }
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });*/
+        //selectInfo();
+        showTypeRoomSpiner();
+        showCityNameSpiner();
+
+
+        edtCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                city[0] = arrayCity.get(i);
+                showDistrictNameSpiner();
+                edtDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        district[0] = arrayDistrict.get(i);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         createPictureSelect();
         addEvents();
+    }
+
+    private void showDistrictNameSpiner() {
+        if (!TextUtils.isEmpty(city[0])){
+            DistrictRef.child(city[0]).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        arrayDistrict.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            arrayDistrict.add(snapshot.getValue().toString());
+                        }
+
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayDistrict);
+                        edtDistrict.setAdapter(arrayAdapter);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void showCityNameSpiner() {
+        CityNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    arrayCity.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        arrayCity.add(snapshot.getValue().toString());
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayCity);
+                    edtCity.setAdapter(arrayAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void showTypeRoomSpiner() {
+        TypeMotelRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    arrayTypeRoom.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        arrayTypeRoom.add(snapshot.getValue().toString());
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayTypeRoom);
+                    edtName.setAdapter(arrayAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void addEvents() {
@@ -93,22 +265,31 @@ public class CreatePostsActivity extends AppCompatActivity {
     }
 
     public void onClickCreatePosts(View view) {
-        String name         = edtName.getText().toString();
+        //String name         = edtName.getText().toString();
         String describe     = edtDescribe.getText().toString();
         String price        = edtPrice.getText().toString();
         String street       = edtStreet.getText().toString();
-        String district     = edtDistrict.getText().toString();
-        String city         = edtCity.getText().toString();
+        //String district     = edtDistrict.getText().toString();
+       // String city         = edtCity.getText().toString();
+
+
+        edtName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                name[0] = arrayTypeRoom.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         if (arrayPicture.size() == 0){
             Toast.makeText(this, "Vui lòng chọn hình ảnh phòng trọ !", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(name)){
-            Toast.makeText(this, "Tên phòng trọ không được để trống !", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (TextUtils.isEmpty(describe)){
             Toast.makeText(this, "Mô tả không được để trống !", Toast.LENGTH_SHORT).show();
@@ -125,16 +306,6 @@ public class CreatePostsActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(district)){
-            Toast.makeText(this, "Quận/Huyện không được để trống !", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(city)){
-            Toast.makeText(this, "Tên thành phố không được để trống !", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (position == null){
             Toast.makeText(this, "Tọa độ chưa được chọn !", Toast.LENGTH_SHORT).show();
             return;
@@ -146,12 +317,12 @@ public class CreatePostsActivity extends AppCompatActivity {
 
         final MotelRoom motelRoom = new MotelRoom();
         motelRoom.setId(id);
-        motelRoom.setNameMotelRoom(name);
+        motelRoom.setNameMotelRoom(name[0]);
         motelRoom.setDescribe(describe);
         motelRoom.setPrice(Long.valueOf(price));
         motelRoom.setStreet(street);
-        motelRoom.setDistrict(district);
-        motelRoom.setCity(city);
+        motelRoom.setDistrict(district[0]);
+        motelRoom.setCity(city[0]);
         motelRoom.setPosition(position);
         motelRoom.setAccount(AccountUtils.getInstance().getAccount());
 
@@ -255,6 +426,8 @@ public class CreatePostsActivity extends AppCompatActivity {
         edtCity         = findViewById(R.id.edtCity);
         txtLatitude     = findViewById(R.id.txtLatitude);
         txtLongitude    = findViewById(R.id.txtLongitude);
+
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải lên hình ảnh");
