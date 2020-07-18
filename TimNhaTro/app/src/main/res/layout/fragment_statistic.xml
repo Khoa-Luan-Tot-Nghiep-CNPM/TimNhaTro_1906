@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.StatisticFragment">
+
+    <include
+        android:id="@+id/statistic_toolbar"
+        layout="@layout/app_bar_layout">
+    </include>
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/BarChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+    </com.github.mikephil.charting.charts.BarChart>
+</FrameLayout>

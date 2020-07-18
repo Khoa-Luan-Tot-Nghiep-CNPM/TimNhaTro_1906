@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:padding="2.5dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imgPicture"
+        android:src="@color/colorBlue"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:layout_gravity="bottom"
+        android:text="Ảnh bìa"
+        android:gravity="center"
+        android:background="#4F111111"
+        android:textColor="#fff" />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_cancel"
+        android:padding="5dp"
+        android:layout_gravity="end"
+        android:id="@+id/imgDelete"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+</FrameLayout>
