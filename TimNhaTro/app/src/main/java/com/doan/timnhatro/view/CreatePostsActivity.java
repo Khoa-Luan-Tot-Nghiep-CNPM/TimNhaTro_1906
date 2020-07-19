@@ -319,7 +319,7 @@ public class CreatePostsActivity extends AppCompatActivity {
         motelRoom.setPrice(Long.valueOf(price));
         motelRoom.setStreet(street);
         motelRoom.setDistrict(district[0]);
-        motelRoom.setCity(city[0]);
+        motelRoom.setCity(city[1]);
         motelRoom.setPosition(position);
         motelRoom.setAccount(AccountUtils.getInstance().getAccount());
 
