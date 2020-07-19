@@ -1,15 +1,19 @@
 package com.doan.timnhatro.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,6 +24,7 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.doan.timnhatro.R;
 import com.doan.timnhatro.adapter.MotelRoomAdapter;
+import com.doan.timnhatro.adapter.ResultNullAdapter;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.MotelRoom;
 import com.doan.timnhatro.utils.AccountUtils;
@@ -52,8 +58,10 @@ public class HouseFragment extends Fragment {
     //private View container;
     private RecyclerView recRoomsFeatured;
     private MotelRoomAdapter motelRoomAdapter;
-    private Button SearchNearBtn, AddPostBtn, btnChonKhoangGia, btnLoaiPhong;
+    private ResultNullAdapter resultNullAdapter;
+    private Button SearchNearBtn, AddPostBtn, btnChonKhoangGia, btnLoaiPhong, btnUse, btnSearch, btnSearchMotelRoom;
     private ArrayList<MotelRoom> arrayMotelRoom = new ArrayList<>();
+    private ArrayList<String> arrayList = new ArrayList<>();
     //private ArrayList<MotelRoom> arrayMotelRoomSave = new ArrayList<>();
     private Spinner spinner;
     private LinearLayout linearLayoutTypeRoom;
@@ -63,13 +71,15 @@ public class HouseFragment extends Fragment {
     private ListView listView;
     private TextView txtDisplay;
     private RangeSeekBar rangeSeekBar;
-    private Button btnUse;
+    private Dialog dialog;
+    private ImageButton imgButton;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference dataRef;
 
-    boolean isClickSpinner = false;
+    boolean isClickSpinner = false, isClickButtonRange = false, isClickButtonTypeRoom = false;
     long number1, number2;
+    Bundle bundle;
 
     public HouseFragment() {
         // Required empty public constructor
@@ -103,83 +113,14 @@ public class HouseFragment extends Fragment {
         });
         SliderShow(v);
 
-        getDataCityFromFirebase();
-
-        btnLoaiPhong.setOnClickListener(listener);
-        btnChonKhoangGia.setOnClickListener(listener);
-
-        bottomSheetBehaviorTypeRoom.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_HIDDEN);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogSearch(getContext());
+            }
+        });
 
         return v;
-    }
-
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.button_choose_range_price:
-                    showBottomSheetPriceRange();
-                    break;
-                case R.id.button_type_room:
-                    showBottomSheetTypeRoom();
-                    break;
-            }
-        }
-    };
-
-
-    private void getDataCityFromFirebase() {
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        dataRef = firebaseDatabase.getReference().child("CiTy");
-        dataRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> arrayList = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String nameCity = dataSnapshot.getValue(String.class);
-                    arrayList.add(nameCity);
-                }
-
-                setUpSpinner(arrayList);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void setUpSpinner(final List<String> list) {
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
-        spinner.setAdapter(arrayAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isClickSpinner = true;
-                if (isClickSpinner) {
-                    if (position == 0) {
-                        arrayMotelRoom.clear();
-                        setUpRecyclerView();
-                    } else {
-                        arrayMotelRoom.clear();
-                        setUpRecyclerViewWithNameCity(list.get(position));
-                    }
-
-                } else {
-                    arrayMotelRoom.clear();
-                    setUpRecyclerView();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private boolean checkPermission() {
@@ -224,6 +165,8 @@ public class HouseFragment extends Fragment {
                             arrayMotelRoom.add(motelRoom);
                         }
 
+
+
                         motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
                         recRoomsFeatured.setAdapter(motelRoomAdapter);
                     }
@@ -250,9 +193,16 @@ public class HouseFragment extends Fragment {
                                 arrayMotelRoom.add(motelRoom);
                             }
                         }
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
 
-                        motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
-                        recRoomsFeatured.setAdapter(motelRoomAdapter);
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
                     }
 
                     @Override
@@ -280,8 +230,16 @@ public class HouseFragment extends Fragment {
                             }
                         }
 
-                        motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
-                        recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
                     }
 
                     @Override
@@ -308,8 +266,16 @@ public class HouseFragment extends Fragment {
                             }
                         }
 
-                        motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
-                        recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
                     }
 
                     @Override
@@ -329,22 +295,167 @@ public class HouseFragment extends Fragment {
     }
 
     private void initView(View v) {
-        linearLayoutTypeRoom = v.findViewById(R.id.layout_type_room);
-        relativeLayoutPriceRange = v.findViewById(R.id.layout_price_range);
-        bottomSheetBehaviorTypeRoom = BottomSheetBehavior.from(linearLayoutTypeRoom);
-        bottomSheetBehaviorPriceRange = BottomSheetBehavior.from(relativeLayoutPriceRange);
-
-        rangeSeekBar = v.findViewById(R.id.range_seekBar);
-        txtDisplay = v.findViewById(R.id.textview_price_range);
-
         recRoomsFeatured = v.findViewById(R.id.recRoomsFeatured);
         SearchNearBtn = v.findViewById(R.id.btn_findNear);
         AddPostBtn = v.findViewById(R.id.btn_addPost);
-        spinner = v.findViewById(R.id.spinner_khuvuc);
-        btnChonKhoangGia = v.findViewById(R.id.button_choose_range_price);
-        btnLoaiPhong = v.findViewById(R.id.button_type_room);
-        listView = v.findViewById(R.id.listview_type_room);
-        btnUse = v.findViewById(R.id.button_used);
+        btnSearch = v.findViewById(R.id.btn_findRoom);
+    }
+
+    public void flipperImage(int image) {
+        ImageView imageView = new ImageView(getActivity());
+        imageView.setBackgroundResource(image);
+        viewFlipper.addView(imageView);
+        viewFlipper.setFlipInterval(5000);
+        viewFlipper.setAutoStart(true);
+
+        //animation
+
+        viewFlipper.setInAnimation(getActivity(), android.R.anim.slide_in_left);
+        viewFlipper.setOutAnimation(getActivity(), android.R.anim.slide_out_right);
+    }
+
+    private void showDialogSearch(Context context) {
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+
+        linearLayoutTypeRoom = dialog.findViewById(R.id.layout_type_room);
+        relativeLayoutPriceRange = dialog.findViewById(R.id.layout_price_range);
+        bottomSheetBehaviorTypeRoom = BottomSheetBehavior.from(linearLayoutTypeRoom);
+        bottomSheetBehaviorPriceRange = BottomSheetBehavior.from(relativeLayoutPriceRange);
+        btnLoaiPhong = dialog.findViewById(R.id.button_type_room);
+        btnChonKhoangGia = dialog.findViewById(R.id.button_choose_range_price);
+        btnSearchMotelRoom = dialog.findViewById(R.id.button_search);
+        imgButton = dialog.findViewById(R.id.imagebutton_cancel);
+
+        rangeSeekBar = dialog.findViewById(R.id.range_seekBar);
+        txtDisplay = dialog.findViewById(R.id.textview_price_range);
+
+        bottomSheetBehaviorTypeRoom.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        spinner = dialog.findViewById(R.id.spinner_khuvuc);
+        listView = dialog.findViewById(R.id.listview_type_room);
+        btnUse = dialog.findViewById(R.id.button_used);
+
+        bundle = new Bundle();
+
+        dialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().getAttributes().gravity = Gravity.CENTER;
+        dialog.getWindow().getAttributes().horizontalMargin = 10.0f;
+        dialog.getWindow().getAttributes().verticalMargin = 10.0f;
+
+        getDataCityFromFirebase();
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        btnSearchMotelRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bundle != null) {
+                    String nameCity = bundle.getString("nameCity");
+                    String nameTypeRoom = bundle.getString("nameTypeRoom");
+                    long rangePrice1 = bundle.getLong("rangePrice1");
+                    long rangePrice2 = bundle.getLong("rangePrice2");
+
+                    if (!nameCity.equals("Chọn tỉnh/ thành phố") && nameTypeRoom != null && (rangePrice1 != 0 && rangePrice2 != 0)) {
+                        arrayMotelRoom.clear();
+                        displayListMotelRoomWithAllCondition(nameCity, nameTypeRoom, rangePrice1, rangePrice2);
+                    } else if (!nameCity.equals("Chọn tỉnh/ thành phố") && nameTypeRoom != null) {
+                        arrayMotelRoom.clear();
+                        displayListhMotelRoomWithNameCityAndNameTypeRoom(nameCity, nameTypeRoom);
+                    } else if (nameTypeRoom != null && rangePrice1 != 0 && rangePrice2 != 0) {
+                        arrayMotelRoom.clear();
+                        displayListMotelRoomWithRangePriceAndNameTypeRoom(nameTypeRoom, rangePrice1, rangePrice2);
+                    }
+                    else if (!nameCity.equals("Chọn tỉnh/ thành phố") && rangePrice1 != 0 && rangePrice2 != 0) {
+                        arrayMotelRoom.clear();
+                        displayListMotelRoomWithRangePriceAndNameCity(nameCity, rangePrice1, rangePrice2);
+                    }
+                    else {
+                        if (!nameCity.equals("Chọn tỉnh/ thành phố")) {
+                            arrayMotelRoom.clear();
+                            setUpRecyclerViewWithNameCity(nameCity);
+                        } else if (nameTypeRoom != null) {
+                            arrayMotelRoom.clear();
+                            setUpRecyclerViewWithTypeRoom(nameTypeRoom);
+                        }
+                        else if(rangePrice1 != 0 && rangePrice2 != 0){
+                            arrayMotelRoom.clear();
+                            setUpRecyclerViewWithRangePrice(rangePrice1, rangePrice2);
+                        }
+                    }
+                }
+                dialog.cancel();
+            }
+        });
+
+        btnLoaiPhong.setOnClickListener(listener);
+        btnChonKhoangGia.setOnClickListener(listener);
+
+        dialog.show();
+    }
+
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.button_choose_range_price:
+                    showBottomSheetPriceRange();
+                    break;
+                case R.id.button_type_room:
+                    showBottomSheetTypeRoom();
+                    break;
+            }
+        }
+    };
+
+    private void getDataCityFromFirebase() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dataRef = firebaseDatabase.getReference().child("CiTy");
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> arrayList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String nameCity = dataSnapshot.getValue(String.class);
+                    arrayList.add(nameCity);
+                }
+
+                setUpSpinner(arrayList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setUpSpinner(final List<String> list) {
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
+        spinner.setAdapter(arrayAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                bundle.putString("nameCity", list.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void showBottomSheetTypeRoom() {
+        bottomSheetBehaviorTypeRoom.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        setUpListViewTypeRoom();
     }
 
     private void setUpListViewTypeRoom() {
@@ -367,9 +478,7 @@ public class HouseFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String nameTypeRoom = arrayList.get(position);
                         btnLoaiPhong.setText(nameTypeRoom);
-
-                        arrayMotelRoom.clear();
-                        setUpRecyclerViewWithTypeRoom(nameTypeRoom);
+                        bundle.putString("nameTypeRoom", nameTypeRoom);
 
                         bottomSheetBehaviorTypeRoom.setState(BottomSheetBehavior.STATE_HIDDEN);
                     }
@@ -383,32 +492,14 @@ public class HouseFragment extends Fragment {
         });
     }
 
-    public void flipperImage(int image) {
-        ImageView imageView = new ImageView(getActivity());
-        imageView.setBackgroundResource(image);
-        viewFlipper.addView(imageView);
-        viewFlipper.setFlipInterval(5000);
-        viewFlipper.setAutoStart(true);
-
-        //animation
-
-        viewFlipper.setInAnimation(getActivity(), android.R.anim.slide_in_left);
-        viewFlipper.setOutAnimation(getActivity(), android.R.anim.slide_out_right);
-    }
-
-    private void showBottomSheetTypeRoom() {
-        bottomSheetBehaviorTypeRoom.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        setUpListViewTypeRoom();
-    }
-
     private void showBottomSheetPriceRange() {
         bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_COLLAPSED);
         txtDisplay.setText("Giá từ 0đ đến 100000000đ");
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onProgressChanged(RangeSeekBar rangeSeekBar, int i, int i1, boolean b) {
-                number1 = Long.parseLong(String.valueOf(i)) * 1000000;
-                number2 = Long.parseLong(String.valueOf(i1)) * 1000000;
+                number1 = Long.parseLong(String.valueOf(i)) * 100000;
+                number2 = Long.parseLong(String.valueOf(i1)) * 100000;
                 txtDisplay.setText("Giá từ " + number1 + "đ đến " + number2 + "đ");
             }
 
@@ -426,10 +517,142 @@ public class HouseFragment extends Fragment {
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrayMotelRoom.clear();
-                setUpRecyclerViewWithRangePrice(number1, number2);
+                btnChonKhoangGia.setText(number1 + "đ đến " + number2 + "đ");
                 bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_HIDDEN);
+                bundle.putLong("rangePrice1", number1);
+                bundle.putLong("rangePrice2", number2);
             }
         });
+    }
+
+    private void displayListhMotelRoomWithNameCityAndNameTypeRoom(final String str1,
+                                                                  final String str2) {
+        FirebaseDatabase.getInstance().getReference().child("MotelRoom")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            MotelRoom motelRoom = dataSnapshot.getValue(MotelRoom.class);
+                            if (motelRoom.getCity().equals(str1) && motelRoom.getNameMotelRoom().equals(str2)) {
+                                arrayMotelRoom.add(motelRoom);
+                            }
+                        }
+
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void displayListMotelRoomWithRangePriceAndNameCity(final String str1,
+                                                               final long a, final long b) {
+        FirebaseDatabase.getInstance().getReference().child("MotelRoom")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            MotelRoom motelRoom = dataSnapshot.getValue(MotelRoom.class);
+                            if (motelRoom.getCity().equals(str1) &&
+                                    (motelRoom.getPrice() >= a && motelRoom.getPrice() <= b)) {
+                                arrayMotelRoom.add(motelRoom);
+                            }
+                        }
+
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void displayListMotelRoomWithRangePriceAndNameTypeRoom(final String str1,
+                                                                   final long a, final long b) {
+        FirebaseDatabase.getInstance().getReference().child("MotelRoom")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            MotelRoom motelRoom = dataSnapshot.getValue(MotelRoom.class);
+                            if (motelRoom.getNameMotelRoom().equals(str1) &&
+                                    (motelRoom.getPrice() >= a && motelRoom.getPrice() <= b)) {
+                                arrayMotelRoom.add(motelRoom);
+                            }
+                        }
+
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void displayListMotelRoomWithAllCondition(final String str1, final String str2,
+                                                      final long a, final long b) {
+        FirebaseDatabase.getInstance().getReference().child("MotelRoom")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            MotelRoom motelRoom = dataSnapshot.getValue(MotelRoom.class);
+                            if (motelRoom.getCity().equals(str1) && motelRoom.getNameMotelRoom().equals(str2) &&
+                                    (motelRoom.getPrice() >= a && motelRoom.getPrice() <= b)) {
+                                arrayMotelRoom.add(motelRoom);
+                            }
+                        }
+
+                        if (arrayMotelRoom.size()>0){
+                            motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
+                            recRoomsFeatured.setAdapter(motelRoomAdapter);
+                        }else {
+
+
+                            arrayList.add("Không có kết quả nào phù hợp!");
+                            resultNullAdapter = new ResultNullAdapter(arrayList);
+                            recRoomsFeatured.setAdapter(resultNullAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }
