@@ -60,12 +60,12 @@
                         android:textSize="13sp" />
                 </LinearLayout>
                 <ImageView
-                    android:id="@+id/likepost"
+                    android:id="@+id/threedost"
                     android:layout_weight="1"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_dislike_circle" />
+                    android:src="@drawable/ic_spots" />
             </LinearLayout>
             <TextView
                 android:id="@+id/txtPrice"
@@ -93,15 +93,41 @@
                 android:layout_height="300dp"
                 android:src="#111"
                 android:layout_marginTop="10dp"/>
-            <TextView
-                android:id="@+id/txtViewDetail"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Xem chi tiết"
-                android:gravity="center"
-                android:textColor="#111"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/likepost"
+                    android:layout_weight="1"
+                    android:layout_width="10dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_dislike_circle" />
+
+                <TextView
+                    android:id="@+id/txtViewDetail"
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Xem chi tiết"
+                    android:gravity="center"
+                    android:textColor="#111"
+
+                    android:layout_marginBottom="0dp"/>
+
+                <ImageView
+                    android:id="@+id/comment"
+                    android:layout_weight="1"
+                    android:layout_width="10dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+
+                    android:src="@drawable/ic_comment" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

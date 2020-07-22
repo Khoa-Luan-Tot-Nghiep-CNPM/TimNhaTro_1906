@@ -29,7 +29,6 @@ import com.doan.timnhatro.adapter.PictureIntroduceAdapter;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.callback.OnPickPictureListener;
 import com.doan.timnhatro.model.MotelRoom;
-import com.doan.timnhatro.model.Notification;
 import com.doan.timnhatro.model.Position;
 import com.doan.timnhatro.utils.AccountUtils;
 import com.doan.timnhatro.utils.LocationUtils;
@@ -54,14 +53,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CreatePostsActivity extends AppCompatActivity {
+public class EditPostActivity extends AppCompatActivity {
 
     private RecyclerView recPicture;
     private ArrayList<String> arrayPicture = new ArrayList<>();
     private final ArrayList<String> arrayTypeRoom = new ArrayList<>();
     private final ArrayList<String> arrayCity = new ArrayList<>();
     private final ArrayList<String> arrayDistrict = new ArrayList<>();
-
     private PictureIntroduceAdapter pictureIntroduceAdapter;
     private Position position;
     private EditText edtDescribe, edtPrice, edtStreet;
@@ -69,6 +67,7 @@ public class CreatePostsActivity extends AppCompatActivity {
     private Spinner edtName, edtCity, edtDistrict;
     private ProgressDialog progressDialog;
     private DatabaseReference TypeMotelRef, CityNameRef, DistrictRef;
+    private MotelRoom motelRoom = new MotelRoom();
 
     String[] name = new String[2];
     String[] city = new String[2];
@@ -77,15 +76,21 @@ public class CreatePostsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_posts);
+        setContentView(R.layout.activity_edit_post);
 
         TypeMotelRef = FirebaseDatabase.getInstance().getReference().child("typemotel");
         CityNameRef = FirebaseDatabase.getInstance().getReference().child("CiTy");
         DistrictRef = FirebaseDatabase.getInstance().getReference().child("District");
 
 
+        motelRoom = getIntent().getParcelableExtra("RoomInfo");
 
-        initView();
+        if (motelRoom!= null){
+            for (int i=0 ; i<motelRoom.getArrayPicture().size() ; i++ ){
+                arrayPicture.add(motelRoom.getArrayPicture().get(i));
+            }
+            initView();
+
        /* edtName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,49 +142,55 @@ public class CreatePostsActivity extends AppCompatActivity {
 
             }
         });*/
-        //selectInfo();
-        showTypeRoomSpiner();
-        showCityNameSpiner();
+            //selectInfo();
+            showTypeRoomSpiner();
+            showCityNameSpiner();
 
-        edtName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                name[0] = arrayTypeRoom.get(i);
-            }
+            edtName.setSelection(3, true);
+            edtCity.setSelection(3, true);
+            edtDistrict.setSelection(3, true);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            edtName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    name[0] = arrayTypeRoom.get(i);
+                }
 
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-        edtCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                city[1] = arrayCity.get(i);
-                showDistrictNameSpiner();
-                edtDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        district[0] = arrayDistrict.get(i);
-                    }
+                }
+            });
+            edtCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    city[1] = arrayCity.get(i);
+                    showDistrictNameSpiner();
+                    edtDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            district[0] = arrayDistrict.get(i);
+                        }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
-            }
+                        }
+                    });
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
 
-        createPictureSelect();
-        addEvents();
+            createPictureSelect();
+            addEvents();
+        }
+
     }
+
 
     private void showDistrictNameSpiner() {
         if (!TextUtils.isEmpty(city[1])) {
@@ -192,7 +203,7 @@ public class CreatePostsActivity extends AppCompatActivity {
                             arrayDistrict.add(snapshot.getValue().toString());
                         }
 
-                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayDistrict);
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditPostActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayDistrict);
                         edtDistrict.setAdapter(arrayAdapter);
                     }
                 }
@@ -215,7 +226,7 @@ public class CreatePostsActivity extends AppCompatActivity {
                         arrayCity.add(snapshot.getValue().toString());
                     }
 
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayCity);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditPostActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayCity);
                     edtCity.setAdapter(arrayAdapter);
                 }
             }
@@ -239,8 +250,9 @@ public class CreatePostsActivity extends AppCompatActivity {
                         arrayTypeRoom.add(snapshot.getValue().toString());
                     }
 
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(CreatePostsActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayTypeRoom);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(EditPostActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayTypeRoom);
                     edtName.setAdapter(arrayAdapter);
+
                 }
             }
 
@@ -314,7 +326,7 @@ public class CreatePostsActivity extends AppCompatActivity {
 
         arrayPicture.remove("Demo");
 
-        final String id = System.currentTimeMillis() + "";
+        final String id = motelRoom.getId();
 
         final MotelRoom motelRoom = new MotelRoom();
         motelRoom.setId(id);
@@ -395,27 +407,27 @@ public class CreatePostsActivity extends AppCompatActivity {
                 if (error == null) {
                     progressDialog.setMessage("Đang tải lên bài viết...");
                     FirebaseDatabase.getInstance().getReference()
-                            .child("MotelRoomQueue")
+                            .child("MotelRoom")
                             .child(motelRoom.getId())
                             .setValue(motelRoom, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                     if (databaseError == null) {
                                         progressDialog.cancel();
-                                        Toast.makeText(getApplicationContext(), "Tạo phòng trọ thành công", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Sửa phòng trọ thành công", Toast.LENGTH_SHORT).show();
 
                                         // Insert notification into Admin
-                                        Notification notification = new Notification();
+                                        /*Notification notification = new Notification();
                                         notification.setId(System.currentTimeMillis() + "");
                                         notification.setUserName(AccountUtils.getInstance().getAccount().getUserName());
 
                                         FirebaseDatabase.getInstance().getReference().child("NotificationAdmin").child(notification.getId()).setValue(notification);
 
-                                        finish();
+                                        finish();*/
                                     } else {
                                         progressDialog.cancel();
                                         geoFire.removeLocation(motelRoom.getId());
-                                        Toast.makeText(getApplicationContext(), "Tạo phòng trọ thất bại !", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Sửa phòng trọ thất bại !", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -438,11 +450,18 @@ public class CreatePostsActivity extends AppCompatActivity {
         txtLatitude = findViewById(R.id.txtLatitude);
         txtLongitude = findViewById(R.id.txtLongitude);
 
+        edtDescribe.setText(motelRoom.getDescribe());
+        edtPrice.setText(String.valueOf(motelRoom.getPrice()));
+        txtLatitude.setText(String.valueOf(motelRoom.getPosition().getLatitude()));
+        txtLongitude.setText(String.valueOf(motelRoom.getPosition().getLongitude()));
+        edtStreet.setText(motelRoom.getStreet());
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải lên hình ảnh");
         progressDialog.setCancelable(false);
     }
+
 
     public void cnClickCancel(View view) {
         finish();

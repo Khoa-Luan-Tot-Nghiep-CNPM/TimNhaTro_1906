@@ -47,8 +47,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import it.sephiroth.android.library.rangeseekbar.RangeSeekBar;
 
@@ -56,11 +58,14 @@ public class HouseFragment extends Fragment {
 
 
     //private View container;
+    Locale localeVN = new Locale("vi", "VN");
+    private NumberFormat numberFormat = NumberFormat.getInstance(localeVN);
     private RecyclerView recRoomsFeatured;
     private MotelRoomAdapter motelRoomAdapter;
     private ResultNullAdapter resultNullAdapter;
     private Button SearchNearBtn, AddPostBtn, btnChonKhoangGia, btnLoaiPhong, btnUse, btnSearch, btnSearchMotelRoom;
     private ArrayList<MotelRoom> arrayMotelRoom = new ArrayList<>();
+    private ArrayList<MotelRoom> arrayMotelRoomTmp = new ArrayList<>();
     private ArrayList<String> arrayList = new ArrayList<>();
     //private ArrayList<MotelRoom> arrayMotelRoomSave = new ArrayList<>();
     private Spinner spinner;
@@ -162,10 +167,12 @@ public class HouseFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             MotelRoom motelRoom = dataSnapshot.getValue(MotelRoom.class);
-                            arrayMotelRoom.add(motelRoom);
+                            arrayMotelRoomTmp.add(motelRoom);
                         }
 
-
+                        for (int i= 0 ; i< arrayMotelRoomTmp.size(); i++){
+                            arrayMotelRoom.add(arrayMotelRoomTmp.get(arrayMotelRoomTmp.size()-1-i));
+                        }
 
                         motelRoomAdapter = new MotelRoomAdapter(arrayMotelRoom);
                         recRoomsFeatured.setAdapter(motelRoomAdapter);
@@ -494,13 +501,13 @@ public class HouseFragment extends Fragment {
 
     private void showBottomSheetPriceRange() {
         bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        txtDisplay.setText("Giá từ 0đ đến 100000000đ");
+        txtDisplay.setText("Giá từ 0đ đến 10.000.000đ");
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onProgressChanged(RangeSeekBar rangeSeekBar, int i, int i1, boolean b) {
                 number1 = Long.parseLong(String.valueOf(i)) * 100000;
                 number2 = Long.parseLong(String.valueOf(i1)) * 100000;
-                txtDisplay.setText("Giá từ " + number1 + "đ đến " + number2 + "đ");
+                txtDisplay.setText("Giá từ " + numberFormat.format(number1) + "đ đến " + numberFormat.format(number2) + "đ");
             }
 
             @Override
@@ -517,7 +524,7 @@ public class HouseFragment extends Fragment {
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnChonKhoangGia.setText(number1 + "đ đến " + number2 + "đ");
+                btnChonKhoangGia.setText(numberFormat.format(number1) + "đ đến " + numberFormat.format(number2) + "đ");
                 bottomSheetBehaviorPriceRange.setState(BottomSheetBehavior.STATE_HIDDEN);
                 bundle.putLong("rangePrice1", number1);
                 bundle.putLong("rangePrice2", number2);

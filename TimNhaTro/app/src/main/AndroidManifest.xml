@@ -20,6 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".view.CommentsActivity"></activity>
+        <activity android:name=".view.EditPostActivity" />
         <activity android:name=".view.ChartStatisticActivity" />
         <activity android:name=".view.SearchFilterRoomActivity" />
         <activity android:name=".view.PostsManagerActivity" />
