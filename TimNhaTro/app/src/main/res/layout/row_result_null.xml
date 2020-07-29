@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textNull"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="Không có kết quả nào cần tìm!"
+        android:textAlignment="center"
+        android:paddingTop="150dp"
+        android:textSize="20sp" />
+</RelativeLayout>

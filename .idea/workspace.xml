@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cea49a93-e0e2-4b10-a6cc-0eb46fa4d038" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1eg9MDu277MT2V2VlXUB8JC1jxQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.language" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cea49a93-e0e2-4b10-a6cc-0eb46fa4d038" name="Default Changelist" comment="" />
+      <created>1594732319642</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1594732319642</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="184" y="82" width="1071" height="703" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1594732654198">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state x="184" y="82" width="1071" height="703" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.813@0.23.1440.813" timestamp="1594732654198" />
+    <state width="1398" height="367" key="GridCell.Tab.0.bottom" timestamp="1594732685329">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1398" height="367" key="GridCell.Tab.0.bottom/0.23.1440.813@0.23.1440.813" timestamp="1594732685329" />
+    <state width="1398" height="367" key="GridCell.Tab.0.center" timestamp="1594732685329">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1398" height="367" key="GridCell.Tab.0.center/0.23.1440.813@0.23.1440.813" timestamp="1594732685329" />
+    <state width="1398" height="367" key="GridCell.Tab.0.left" timestamp="1594732685328">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1398" height="367" key="GridCell.Tab.0.left/0.23.1440.813@0.23.1440.813" timestamp="1594732685327" />
+    <state width="1398" height="367" key="GridCell.Tab.0.right" timestamp="1594732685329">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1398" height="367" key="GridCell.Tab.0.right/0.23.1440.813@0.23.1440.813" timestamp="1594732685329" />
+    <state x="100" y="123" width="1240" height="594" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1594732833156">
+      <screen x="0" y="23" width="1440" height="816" />
+    </state>
+    <state x="100" y="123" width="1240" height="594" key="com.android.tools.idea.avdmanager.AvdListDialog/0.23.1440.816@0.23.1440.816" timestamp="1594732833156" />
+    <state x="390" y="252" key="com.intellij.ide.util.TipDialog" timestamp="1594732355528">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state x="390" y="252" key="com.intellij.ide.util.TipDialog/0.23.1440.813@0.23.1440.813" timestamp="1594732355528" />
+  </component>
+</project>
