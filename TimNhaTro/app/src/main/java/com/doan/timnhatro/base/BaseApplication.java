@@ -51,6 +51,7 @@ public class BaseApplication extends Application {
                         Notification notification = dataSnapshot.getValue(Notification.class);
 
                         showNotification(notification.getUserName());
+                        isAdminActive = false;
                         FirebaseDatabase.getInstance().getReference().child("NotificationAdmin").child(notification.getId()).setValue(null);
                     }
                 }

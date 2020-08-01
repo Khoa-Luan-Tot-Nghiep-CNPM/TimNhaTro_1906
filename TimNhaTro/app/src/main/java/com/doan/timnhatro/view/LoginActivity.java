@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsername,edtPassword;
-    private Spinner spinnerAuth;
+   // private Spinner spinnerAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +31,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initView();
-
-        String[] arrays = {"Admin", "User"};
+/*        String[] arrays = {"Admin", "User"};
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrays);
-        spinnerAuth.setAdapter(arrayAdapter);
+        spinnerAuth.setAdapter(arrayAdapter);*/
     }
 
     private void initView() {
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
-        spinnerAuth = findViewById(R.id.spinner_auth);
+        //spinnerAuth = findViewById(R.id.spinner_auth);
     }
 
     public void onClickRegistration(View view) {
