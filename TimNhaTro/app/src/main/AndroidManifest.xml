@@ -8,22 +8,24 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <dist:module dist:instant="true" />
 
     <application
         android:name=".base.BaseApplication"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.CommentsActivity"></activity>
+        <activity android:name=".view.ResetPasswordActivity"></activity>
+        <activity android:name=".view.ForgetPasswordActivity" />
+        <activity android:name=".view.CommentsActivity" />
         <activity android:name=".view.EditPostActivity" />
         <activity android:name=".view.ChartStatisticActivity" />
         <activity android:name=".view.SearchFilterRoomActivity" />

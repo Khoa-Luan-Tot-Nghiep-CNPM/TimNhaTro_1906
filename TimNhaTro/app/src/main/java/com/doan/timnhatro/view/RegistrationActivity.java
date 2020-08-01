@@ -18,6 +18,11 @@ import com.bumptech.glide.Glide;
 import com.doan.timnhatro.R;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.Account;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -28,12 +33,14 @@ public class RegistrationActivity extends AppCompatActivity {
     private CircleImageView imgAvatar;
     private EditText        edtUsername,edtPassword,edtRePassword,edtName,edtPhoneNumber;
     private String          pathAvatar;
+    private DatabaseReference AccountRefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        AccountRefs = FirebaseDatabase.getInstance().getReference().child("Account");
         initView();
     }
 
@@ -99,16 +106,32 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
-        Account account = new Account();
-        account.setAvatar(pathAvatar);
-        account.setUserName(userName);
-        account.setName(name);
-        account.setPassword(password);
-        account.setPhoneNumber(phoneNumber);
+        AccountRefs.child(phoneNumber).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Toast.makeText(RegistrationActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Account account = new Account();
+                    account.setAvatar(pathAvatar);
+                    account.setUserName(userName);
+                    account.setName(name);
+                    account.setPassword(password);
+                    account.setPhoneNumber(phoneNumber);
 
-        Intent intent = new Intent(this,VerifyPhoneNumberActivity.class);
-        intent.putExtra(Constants.ACCOUNT,account);
-        startActivity(intent);
+                    Intent intent = new Intent(RegistrationActivity.this,VerifyPhoneNumberActivity.class);
+                    intent.putExtra(Constants.ACCOUNT,account);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public void cnClickAvatart(View view) {

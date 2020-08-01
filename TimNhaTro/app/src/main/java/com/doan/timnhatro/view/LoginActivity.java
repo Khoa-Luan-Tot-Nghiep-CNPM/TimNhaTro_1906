@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsername,edtPassword;
+    private TextView txtForgetPassword;
    // private Spinner spinnerAuth;
 
     @Override
@@ -40,6 +42,15 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
+        txtForgetPassword = findViewById(R.id.txtForgetPassword);
+
+        txtForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
         //spinnerAuth = findViewById(R.id.spinner_auth);
     }
 

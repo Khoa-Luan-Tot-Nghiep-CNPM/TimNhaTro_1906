@@ -68,9 +68,6 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
 
     private void sendVerifyCode() {
 
-
-
-
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 "+84" + account.getPhoneNumber(),
                 30L /*timeout*/,
@@ -83,58 +80,23 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
                                            PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                         VerificationId = verificationId;
                         Toast.makeText(getApplicationContext(), "Gửi mã xác minh thành công", Toast.LENGTH_SHORT).show();
-                        //firebaseAuth.signOut();
                     }
 
                     @Override
                     public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                         edtVerifyCode.setText(phoneAuthCredential.getSmsCode());
-                        //firebaseAuth.signOut();
                     }
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             Toast.makeText(getApplicationContext(), "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
-                            //firebaseAuth.signOut();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             Toast.makeText(getApplicationContext(), "Hạn ngạch SMS cho dự án đã bị vượt quá", Toast.LENGTH_SHORT).show();
-                           // firebaseAuth.signOut();
                         }
                     }
 
                 });
-
-        /*PhoneAuthProvider.getInstance().verifyPhoneNumber(
-               "+84" + account.getPhoneNumber(),        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                mCallbacks
-                *//*new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                        edtVerifyCode.setText(phoneAuthCredential.getSmsCode());
-                    }
-
-                    @Override
-                    public void onVerificationFailed(FirebaseException e) {
-                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                            Toast.makeText(getApplicationContext(), "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
-                        } else if (e instanceof FirebaseTooManyRequestsException) {
-                            Toast.makeText(getApplicationContext(), "Hạn ngạch SMS cho dự án đã bị vượt quá", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        super.onCodeSent(s, forceResendingToken);
-                        verificationId = s;
-                        Toast.makeText(getApplicationContext(), "Gửi mã xác minh thành công", Toast.LENGTH_SHORT).show();
-                    }
-                }*//*
-        );*/
-
 
     }
 

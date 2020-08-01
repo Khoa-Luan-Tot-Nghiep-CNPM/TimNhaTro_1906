@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-373130063/TimNhaTro.iml" filepath="$PROJECT_DIR$/.idea/modules/-373130063/TimNhaTro.iml" group="TimNhaTro" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TimNhaTro-app.iml" filepath="$PROJECT_DIR$/.idea/modules/TimNhaTro-app.iml" group="TimNhaTro/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1182207023/TimNhaTro_1906-TimNhaTro.iml" filepath="$PROJECT_DIR$/.idea/modules/-1182207023/TimNhaTro_1906-TimNhaTro.iml" group="TimNhaTro" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app.iml" group="TimNhaTro/app" />
     </modules>
   </component>
