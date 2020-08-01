@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +27,7 @@ import com.doan.timnhatro.utils.DateUtils;
 import com.doan.timnhatro.view.CommentsActivity;
 import com.doan.timnhatro.view.DetailMotelRoomActivity;
 import com.doan.timnhatro.view.EditPostActivity;
+import com.doan.timnhatro.view.HouseActivity;
 import com.doan.timnhatro.view.LoginActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.graphics.Typeface.BOLD;
+import static com.doan.timnhatro.base.BaseApplication.getContext;
 
 public class MotelRoomAdapter extends RecyclerView.Adapter<MotelRoomAdapter.ViewHolder> {
 
@@ -249,18 +253,46 @@ public class MotelRoomAdapter extends RecyclerView.Adapter<MotelRoomAdapter.View
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                             if (error == null){
+                                String id = arrayMotelRoom.get(getAdapterPosition()).getId();
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("MotelRoom")
-                                        .child(arrayMotelRoom.get(getAdapterPosition()).getId())
+                                        .child(id)
                                         .setValue(null);
+                                FirebaseDatabase.getInstance().getReference().child("DeletedMaps")
+                                        .child(arrayMotelRoom.get(getAdapterPosition()).getId())
+                                        .setValue(arrayMotelRoom.get(getAdapterPosition()), new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                                if (error == null){
+                                                    FirebaseDatabase.getInstance().getReference()
+                                                            .child("Maps")
+                                                            .child(id)
+                                                            .setValue(null);
+                                                   // arrayMotelRoom.remove(getAdapterPosition());
+                                                    notifyItemRemoved(getAdapterPosition());
+                                                    //Toast.makeText(view.getContext(), "Xoá tin thành công", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    //Toast.makeText(, "Lỗi: " + error, Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 arrayMotelRoom.remove(getAdapterPosition());
+
                                 notifyItemRemoved(getAdapterPosition());
+
+
+                                Intent intent = new Intent(getContext(), HouseActivity.class);
+                                //intent.putExtra(Constants.MOTEL_ROOM, arrayMotelRoom.get(getAdapterPosition()));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getContext().startActivity(intent);
                                 //Toast.makeText(view.getContext(), "Xoá tin thành công", Toast.LENGTH_SHORT).show();
                             }else {
                                 //Toast.makeText(, "Lỗi: " + error, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
+
         }
 
         public void setLikePostStatus(final String PostKey, final String IdUser){
@@ -282,4 +314,6 @@ public class MotelRoomAdapter extends RecyclerView.Adapter<MotelRoomAdapter.View
             });
         }
     }
+
+
 }
