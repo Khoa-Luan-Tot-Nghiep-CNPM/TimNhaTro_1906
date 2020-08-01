@@ -48,14 +48,18 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
 
     private EditText        edtVerifyCode;
     private Account         account;
-    private String          verificationId;
+    private String          VerificationId;
     private ProgressDialog  progressDialog;
-    private FirebaseAuth    firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth    firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone_number);
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.setLanguageCode("vi");
 
         initView();
         getIntentData();
@@ -63,12 +67,51 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
     }
 
     private void sendVerifyCode() {
+
+
+
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+84" + account.getPhoneNumber(),        // Phone number to verify
+                "+84" + account.getPhoneNumber(),
+                30L /*timeout*/,
+                 TimeUnit.SECONDS,
+                this,
+                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+                    @Override
+                    public void onCodeSent(String verificationId,
+                                           PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        VerificationId = verificationId;
+                        Toast.makeText(getApplicationContext(), "Gửi mã xác minh thành công", Toast.LENGTH_SHORT).show();
+                        //firebaseAuth.signOut();
+                    }
+
+                    @Override
+                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                        edtVerifyCode.setText(phoneAuthCredential.getSmsCode());
+                        //firebaseAuth.signOut();
+                    }
+
+                    @Override
+                    public void onVerificationFailed(FirebaseException e) {
+                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(getApplicationContext(), "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+                            //firebaseAuth.signOut();
+                        } else if (e instanceof FirebaseTooManyRequestsException) {
+                            Toast.makeText(getApplicationContext(), "Hạn ngạch SMS cho dự án đã bị vượt quá", Toast.LENGTH_SHORT).show();
+                           // firebaseAuth.signOut();
+                        }
+                    }
+
+                });
+
+        /*PhoneAuthProvider.getInstance().verifyPhoneNumber(
+               "+84" + account.getPhoneNumber(),        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
-                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                mCallbacks
+                *//*new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                         edtVerifyCode.setText(phoneAuthCredential.getSmsCode());
@@ -89,11 +132,15 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
                         verificationId = s;
                         Toast.makeText(getApplicationContext(), "Gửi mã xác minh thành công", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }*//*
+        );*/
+
+
     }
 
     private void getIntentData() {
         account = getIntent().getParcelableExtra(Constants.ACCOUNT);
+        //Toast.makeText(VerifyPhoneNumberActivity.this, " phone" + account.getPhoneNumber(), Toast.LENGTH_SHORT).show();
     }
 
     private void initView() {
@@ -117,12 +164,12 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
             return;
         }
 
-        if (verificationId == null){
+        if (VerificationId == null){
             Toast.makeText(this, "Mã xác thực chưa được gửi", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verifyCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(VerificationId, verifyCode);
         signInWithPhoneAuthCredential(credential);
     }
 

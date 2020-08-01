@@ -63,7 +63,7 @@ public class MotelRoomAdapter extends RecyclerView.Adapter<MotelRoomAdapter.View
         holder.txtName.setText(arrayMotelRoom.get(holder.getAdapterPosition()).getAccount().getName());
         holder.txtTime.setText(DateUtils.getTimeCount(arrayMotelRoom.get(holder.getAdapterPosition()).getId()));
 
-        if (AccountUtils.getInstance().getAccount().getPhoneNumber()==null){
+        if ( AccountUtils.getInstance().getAccount()== null || AccountUtils.getInstance().getAccount().getPhoneNumber()==null){
             holder.imgThreeDots.setVisibility(View.INVISIBLE);
         }
         else {
