@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.doan.timnhatro.R;
+import com.doan.timnhatro.base.BaseApplication;
 import com.doan.timnhatro.base.Constants;
 import com.doan.timnhatro.model.Account;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -117,7 +119,11 @@ public class RegistrationActivity extends AppCompatActivity {
                     account.setAvatar(pathAvatar);
                     account.setUserName(userName);
                     account.setName(name);
-                    account.setPassword(password);
+                    try {
+                        account.setPassword(BaseApplication.convertHashToString(password));
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
                     account.setPhoneNumber(phoneNumber);
 
                     Intent intent = new Intent(RegistrationActivity.this,VerifyPhoneNumberActivity.class);

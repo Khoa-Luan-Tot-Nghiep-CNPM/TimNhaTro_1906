@@ -12,10 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.doan.timnhatro.R;
+import com.doan.timnhatro.base.BaseApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.security.NoSuchAlgorithmException;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
@@ -38,12 +41,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnChancePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChancePass();
+                try {
+                    ChancePass();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    private void ChancePass() {
+    private void ChancePass() throws NoSuchAlgorithmException {
 
         String newPass = edtNewPass.getText().toString();
         String rePass = edtVerifyPass.getText().toString();
@@ -56,7 +63,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 Toast.makeText(ResetPasswordActivity.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
             }
             else {
-                AccountRefs.child(phone).child("password").setValue(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                AccountRefs.child(phone).child("password").setValue(BaseApplication.convertHashToString(newPass)).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();

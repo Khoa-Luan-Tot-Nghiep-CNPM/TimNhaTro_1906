@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.NoSuchAlgorithmException;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsername,edtPassword;
@@ -58,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(this,RegistrationActivity.class));
     }
 
-    public void onClickLogin(View view) {
+    public void onClickLogin(View view) throws NoSuchAlgorithmException {
         String userName = edtUsername.getText().toString();
         final String password = edtPassword.getText().toString();
 
@@ -81,21 +83,25 @@ public class LoginActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()){
                             Account account = dataSnapshot.getValue(Account.class);
 
-                            if (account.getPassword().equals(password)){
+                            try {
+                                if (account.getPassword().equals(BaseApplication.convertHashToString(password))){
 
-                                AccountUtils.getInstance().setAccount(account);
+                                    AccountUtils.getInstance().setAccount(account);
 
-                                if (AccountUtils.getInstance().getAccount() != null && AccountUtils.getInstance().getAccount().getPhoneNumber().equals(Constants.PHONE_NUMBER_ADMIN)){
-                                    BaseApplication.addAdminNotificationListener();
+                                    if (AccountUtils.getInstance().getAccount() != null && AccountUtils.getInstance().getAccount().getPhoneNumber().equals(Constants.PHONE_NUMBER_ADMIN)){
+                                        BaseApplication.addAdminNotificationListener();
+                                    }
+
+                                    Intent intent = new Intent(getApplicationContext(),HouseActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+
+                                }else {
+                                    Toast.makeText(getApplicationContext(), "Sai mật khẩu !", Toast.LENGTH_SHORT).show();
                                 }
-
-                                Intent intent = new Intent(getApplicationContext(),HouseActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-
-                            }else {
-                                Toast.makeText(getApplicationContext(), "Sai mật khẩu !", Toast.LENGTH_SHORT).show();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
                             }
                         }else {
                             Toast.makeText(getApplicationContext(), "Tài khoản không tồn tại !", Toast.LENGTH_SHORT).show();

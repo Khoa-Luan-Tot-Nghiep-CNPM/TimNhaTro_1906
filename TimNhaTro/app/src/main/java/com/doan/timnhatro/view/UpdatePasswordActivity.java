@@ -13,11 +13,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.doan.timnhatro.R;
+import com.doan.timnhatro.base.BaseApplication;
 import com.doan.timnhatro.model.Account;
 import com.doan.timnhatro.utils.AccountUtils;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.security.NoSuchAlgorithmException;
 
 public class UpdatePasswordActivity extends AppCompatActivity {
 
@@ -71,11 +74,15 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         }
 
         final Account account = AccountUtils.getInstance().getAccount();
-        account.setPassword(password);
+        try {
+            account.setPassword(BaseApplication.convertHashToString(password));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         FirebaseDatabase.getInstance().getReference()
                 .child("Account")
-                .child(account.getUserName())
+                .child(account.getPhoneNumber())
                 .setValue(account, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
