@@ -73,6 +73,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     Toast.makeText(ForgetPasswordActivity.this, "Mã xác thực chưa được gửi", Toast.LENGTH_SHORT).show();
                     return;
                 }
+/*
+                if (VerificationId != verifyCode){
+                    Toast.makeText(ForgetPasswordActivity.this, "Mã xác thực không chính xác", Toast.LENGTH_SHORT).show();
+                    return;
+                }*/
 
                 Intent intent = new Intent(ForgetPasswordActivity.this, ResetPasswordActivity.class);
                 intent.putExtra("Phone", edtPhone.getText().toString());
